@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: terussar <terussar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/21 10:34:14 by terussar          #+#    #+#             */
-/*   Updated: 2023/01/04 16:17:59 by terussar         ###   ########.fr       */
+/*   Created: 2022/12/29 16:00:55 by terussar          #+#    #+#             */
+/*   Updated: 2023/01/04 16:52:24 by terussar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*join_free(char *s, char	*buf)
 {
@@ -103,40 +103,43 @@ char	*keep_line(char *s)
 
 char	*get_next_line(int fd)
 {
-	static char	*s;
+	static char	*s[1024];
 	char		*line;
 
 	if (BUFFER_SIZE < 1 || fd < 0)
 		return (NULL);
-	s = loop(fd, s);
-	if (!s)
+	s[fd] = loop(fd, s[fd]);
+	if (!s[fd])
 		return (NULL);
-	line = get_line(s);
-	if (!s)
+	line = get_line(s[fd]);
+	if (!s[fd])
 	{
-		free(s);
+		free(s[fd]);
 		return (NULL);
 	}
-	s = keep_line(s);
+	s[fd] = keep_line(s[fd]);
 	return (line);
 }
 
 // int	main()
 // {
-// 	int			fd;
-// 	char 	*str;
+// 	int			fd1;
+// 	int			fd2;
+// 	char 	*str1;
+// 	char 	*str2;
+// 	int				i;
 
-// 	fd = open("test.txt", O_RDONLY);
-// 	// fd = 1000;
-// 	// str = loop(fd, s);
-// 	// printf("%s", str);
-// 	while ((str = get_next_line(fd)))
+// 	fd1 = open("homer_dans_l_espace.txt", O_RDONLY);
+// 	fd2 = open("homer_et_potchie.txt", O_RDONLY);
+// 	i = 0;
+// 	while(i < 25)
 // 	{
-// 		printf("%s", str);
-// 		free(str);
+// 		printf("%s", str1 = get_next_line(fd1));
+// 		printf("\n");
+// 		free(str1);
+// 		printf("%s", str2 = get_next_line(fd2));
+// 		printf("\n");
+// 		free(str2);
+// 		i++;
 // 	}
-// 	str = get_next_line(fd);
-// 	printf("%s", str);
-// 	free(str);
-// 	close(fd);
 // }
